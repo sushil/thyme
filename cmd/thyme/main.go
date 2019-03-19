@@ -15,6 +15,7 @@ var CLI = flags.NewNamedParser("thyme", flags.PrintErrors|flags.PassDoubleDash)
 
 func init() {
 	CLI.Usage = `
+(Modified by @skb -- March 7 2019)
 thyme - automatically track which applications you use and for how long.
 
   \|//   thyme is a simple time tracker that tracks active window names and collects

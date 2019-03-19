@@ -38,21 +38,24 @@ func NewDarwinTracker() Tracker {
 const (
 	allWindowsScript = `
 tell application "System Events"
-  set listOfProcesses to (every application process where background only is false)
+	set listOfProcesses to (every application process where background only is false)
 end tell
 
 repeat with proc in listOfProcesses
-  set procName to (name of proc)
-  set procID to (id of proc)
-  log "PROCESS " & procID & ":" & procName
-  -- Attempt to list windows if the process is scriptable
-  try
-    tell application procName
-      repeat with i from 1 to (count windows)
-        log "WINDOW " & (id of window i) & ":" & (name of window i) as string
-      end repeat
-    end tell
-  end try
+	set procName to (name of proc)
+	set procID to (id of proc)
+	log "PROCESS " & procID & ":" & procName
+	-- Attempt to list windows if the process is scriptable
+	-- Hack to blacklist apps that steal focus when not scriptable
+	if (procName is not "goland") and (procName is not "idea") and (procName is not "java") and (procName is not "pycharm") then
+		try
+			tell application procName
+				repeat with i from 1 to (count windows)
+					log "WINDOW " & (id of window i) & ":" & (name of window i) as string
+				end repeat
+			end tell
+		end try
+	end if
 end repeat
 `
 	activeWindowsScript = `
